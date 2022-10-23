@@ -1,6 +1,5 @@
 package com.csse.common;
 
-
 //import javax.xml.transform.TransformerFactoryConfigurationError;
 //import javax.xml.transform.TransformerException;
 import java.io.File;
@@ -12,12 +11,27 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 //import javax.xml.transform.TransformerConfigurationException;
 
+/**
+ * The class Common util extends common properties
+ */
 public class CommonUtil extends CommonProperties {
-	
+
+	public static final String EMPLOYEE_QUERY_FILE_PATH = properties.getProperty("employeeQuery");
+
+	/**
+	 *
+	 * Gets the employee queries
+	 *
+	 * @param id
+	 *            the id
+	 * @return the employee queries
+	 * @throws Exception
+	 */
 	public static String getEmployeeQueries(String id) throws Exception {
-		NodeList node; Element element = null;
-		node = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(new File("src/com/csse/config/EmployeeQuery.xml"))
+
+		NodeList node;
+		Element element = null;
+		node = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(EMPLOYEE_QUERY_FILE_PATH))
 				.getElementsByTagName("query");
 		for (int x = 0; x < node.getLength(); x++) {
 			element = (Element) node.item(x);

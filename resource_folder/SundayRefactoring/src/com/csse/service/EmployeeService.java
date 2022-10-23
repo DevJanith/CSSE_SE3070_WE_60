@@ -15,19 +15,19 @@ import java.sql.PreparedStatement;
 //import javax.xml.xpath.XPathExpressionException;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 //import java.sql.SQLException;
 //import java.util.logging.Level;
 import java.sql.Statement;
 //import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * The class Employee service extends common properties
+ */
 public class EmployeeService extends CommonProperties {
 
-	private final ArrayList<Employee> el = new ArrayList<Employee>();
+	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
 	private static Connection connection;
 
@@ -35,113 +35,145 @@ public class EmployeeService extends CommonProperties {
 
 	private PreparedStatement preparedStatement;
 
-	public static final Logger log = Logger.getLogger(EmployeeService.class.getName());
+	public static final String DRIVER_NAME = properties.getProperty("driverName");
+	public static final String URL = properties.getProperty("url");
+	public static final String USER_NAME = properties.getProperty("username");
+	public static final String USER_PASSWORD = properties.getProperty("password");
 
+	public static final String CREATE_TABLE_EMPLOYEE = "q1";
+	public static final String DROP_TABLE_IF_EXIST_EMPLOYEE = "q2";
+	public static final String INSERT_EMPLOYEE = "q3";
+	public static final String GET_EMPLOYEE = "q4";
+	public static final String GET_ALL_EMPLOYEES = "q5";
+	public static final String DELETE_EMPLOYEE = "q6";
+
+	/**
+	 *
+	 * Employee service
+	 *
+	 * @return
+	 */
 	public EmployeeService() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"),
-					properties.getProperty("password"));
-		} catch (ClassNotFoundException e) {
-			log.log(Level.SEVERE, "Connection not found");
-			log.log(Level.SEVERE, e.getMessage());
 
-		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Error..");
-			log.log(Level.SEVERE, e.getMessage());
+		try {
+			Class.forName(DRIVER_NAME);
+			connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
+	/**
+	 *
+	 * Sets the employees to array list
+	 *
+	 */
 	public void setEmployeesToArrayList() {
 
 		try {
 			int statement = XSLTransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < statement; i++) {
-				Map<String, String> l = XSLTransformUtil.XMLXPATHS().get(i);
+				Map<String, String> element = XSLTransformUtil.XMLXPATHS().get(i);
 				Employee EMPLOYEE = new Employee();
-				EMPLOYEE.setEmployeeID(l.get("XpathEmployeeIDKey"));
-				EMPLOYEE.setFullName(l.get("XpathEmployeeNameKey"));
-				EMPLOYEE.setAddress(l.get("XpathEmployeeAddressKey"));
-				EMPLOYEE.setFacultyName(l.get("XpathFacultyNameKey"));
-				EMPLOYEE.setDepartment(l.get("XpathDepartmentKey"));
-				EMPLOYEE.setDesignation(l.get("XpathDesignationKey"));
-				el.add(EMPLOYEE);
+				EMPLOYEE.setEmployeeID(element.get("XpathEmployeeIDKey"));
+				EMPLOYEE.setFullName(element.get("XpathEmployeeNameKey"));
+				EMPLOYEE.setAddress(element.get("XpathEmployeeAddressKey"));
+				EMPLOYEE.setFacultyName(element.get("XpathFacultyNameKey"));
+				EMPLOYEE.setDepartment(element.get("XpathDepartmentKey"));
+				EMPLOYEE.setDesignation(element.get("XpathDesignationKey"));
+				employeeList.add(EMPLOYEE);
 				System.out.println(EMPLOYEE.toString() + "\n");
 			}
 		} catch (Exception e) {
-			log.log(Level.SEVERE, "SQL Error..");
-			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
+	/**
+	 *
+	 * Create employee table
+	 *
+	 */
 	public void createEmployeeTable() {
+
 		try {
-
 			statement = connection.createStatement();
-			statement.executeUpdate(CommonUtil.getEmployeeQueries("q2"));
-			statement.executeUpdate(CommonUtil.getEmployeeQueries("q1"));
-		} catch (SQLException e) {
-			log.log(Level.SEVERE, "SQL Error..");
-			log.log(Level.SEVERE, e.getMessage());
+			statement.executeUpdate(CommonUtil.getEmployeeQueries(DROP_TABLE_IF_EXIST_EMPLOYEE));
+			statement.executeUpdate(CommonUtil.getEmployeeQueries(CREATE_TABLE_EMPLOYEE));
 		} catch (Exception e) {
-
-			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 		}
-
 	}
 
+	/**
+	 *
+	 * Create employee
+	 *
+	 */
 	public void createEmployee() {
+
 		try {
-			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries("q3"));
+			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries(INSERT_EMPLOYEE));
 			connection.setAutoCommit(false);
-			for (int i = 0; i < el.size(); i++) {
-				Employee e = el.get(i);
-				preparedStatement.setString(1, e.getEmployeeID());
-				preparedStatement.setString(2, e.getFullName());
-				preparedStatement.setString(3, e.getAddress());
-				preparedStatement.setString(4, e.getFacultyName());
-				preparedStatement.setString(5, e.getDepartment());
-				preparedStatement.setString(6, e.getDesignation());
+			for (int i = 0; i < employeeList.size(); i++) {
+				Employee employee = employeeList.get(i);
+				preparedStatement.setString(1, employee.getEmployeeID());
+				preparedStatement.setString(2, employee.getFullName());
+				preparedStatement.setString(3, employee.getAddress());
+				preparedStatement.setString(4, employee.getFacultyName());
+				preparedStatement.setString(5, employee.getDepartment());
+				preparedStatement.setString(6, employee.getDesignation());
 				preparedStatement.addBatch();
 			}
 			preparedStatement.executeBatch();
 			connection.commit();
-		} catch (SQLException e) {
-			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
-			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
+	/**
+	 *
+	 * Gets the employee by identifier
+	 *
+	 * @param eid
+	 *            the employee ID
+	 * 
+	 */
 	public void getEmployeeById(String eid) {
 
-		Employee e = new Employee();
+		Employee employee = new Employee();
 		try {
-			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries("q4"));
+			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries(GET_EMPLOYEE));
 			preparedStatement.setString(1, eid);
 			ResultSet R = preparedStatement.executeQuery();
 			while (R.next()) {
-				e.setEmployeeID(R.getString(1));
-				e.setFullName(R.getString(2));
-				e.setAddress(R.getString(3));
-				e.setFacultyName(R.getString(4));
-				e.setDepartment(R.getString(5));
-				e.setDesignation(R.getString(6));
+				employee.setEmployeeID(R.getString(1));
+				employee.setFullName(R.getString(2));
+				employee.setAddress(R.getString(3));
+				employee.setFacultyName(R.getString(4));
+				employee.setDepartment(R.getString(5));
+				employee.setDesignation(R.getString(6));
 			}
-			ArrayList<Employee> l = new ArrayList<Employee>();
-			l.add(e);
-			printEmployeeDetails(l);
-		} catch (SQLException ex) {
-			log.log(Level.SEVERE, ex.getMessage());
+			ArrayList<Employee> employeeList = new ArrayList<Employee>();
+			employeeList.add(employee);
+			printEmployeeDetails(employeeList);
 		} catch (Exception ex) {
-			log.log(Level.SEVERE, ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 
+	/**
+	 *
+	 * Delete employee by identifier
+	 *
+	 * @param eid
+	 *            the employee ID
+	 */
 	public void deleteEmployeeById(String eid) {
 
 		try {
-			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries("q6"));
+			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries(DELETE_EMPLOYEE));
 			preparedStatement.setString(1, eid);
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
@@ -149,44 +181,51 @@ public class EmployeeService extends CommonProperties {
 		}
 	}
 
+	/**
+	 *
+	 * Gets the all employees
+	 *
+	 */
 	public void getAllEmployees() {
 
-		ArrayList<Employee> l = new ArrayList<Employee>();
-
+		ArrayList<Employee> employeeList = new ArrayList<Employee>();
 		try {
-			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries("q5"));
-
+			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries(GET_ALL_EMPLOYEES));
 			ResultSet r = preparedStatement.executeQuery();
 			while (r.next()) {
-				Employee e = new Employee();
-				e.setEmployeeID(r.getString(1));
-				e.setFullName(r.getString(2));
-				e.setAddress(r.getString(3));
-				e.setFacultyName(r.getString(4));
-				e.setDepartment(r.getString(5));
-				e.setDesignation(r.getString(6));
-				l.add(e);
+				Employee employee = new Employee();
+				employee.setEmployeeID(r.getString(1));
+				employee.setFullName(r.getString(2));
+				employee.setAddress(r.getString(3));
+				employee.setFacultyName(r.getString(4));
+				employee.setDepartment(r.getString(5));
+				employee.setDesignation(r.getString(6));
+				employeeList.add(employee);
 			}
-
-			printEmployeeDetails(l);
-		} catch (SQLException e) {
-			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 		}
+		printEmployeeDetails(employeeList);
 	}
 
-	public void printEmployeeDetails(ArrayList<Employee> l) {
+	/**
+	 *
+	 * Print employee details
+	 *
+	 * @param employeeList
+	 *            the employee list
+	 */
+	public void printEmployeeDetails(ArrayList<Employee> employeeList) {
 
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");
 		System.out.println(
 				"================================================================================================================");
-		for (int i = 0; i < l.size(); i++) {
-			Employee e = l.get(i);
-			System.out.println(e.getEmployeeID() + "\t" + e.getFullName() + "\t\t" + e.getAddress() + "\t"
-					+ e.getFacultyName() + "\t" + e.getDepartment() + "\t" + e.getDesignation() + "\n");
+		for (int i = 0; i < employeeList.size(); i++) {
+			Employee employee = employeeList.get(i);
+			System.out.println(employee.getEmployeeID() + "\t" + employee.getFullName() + "\t\t" + employee.getAddress()
+					+ "\t" + employee.getFacultyName() + "\t" + employee.getDepartment() + "\t"
+					+ employee.getDesignation() + "\n");
 			System.out.println(
 					"----------------------------------------------------------------------------------------------------------------");
 		}

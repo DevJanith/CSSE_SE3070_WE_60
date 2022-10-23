@@ -24,41 +24,69 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 //import javax.xml.xpath.XPathExpression;
 
+/**
+ * The class XSL transform util extends common properties
+ */
 public class XSLTransformUtil extends CommonProperties {
 
 	private static final ArrayList<Map<String, String>> l = new ArrayList<Map<String, String>>();
 
 	private static Map<String, String> m = null;
 
-	public static void rEQUESTtRANSFORM() throws Exception {
+	public static final String EMPLOYEE_REQUEST_FILE_PATH = properties.getProperty("employeeRequest");
+	public static final String EMPLOYEE_RESPONCE_FILE_PATH = properties.getProperty("employeeResponce");
+	public static final String EMPLOYEE_MODIFIED_FILE_PATH = properties.getProperty("employeeModified");
 
-		Source request = new StreamSource(new File("src/com/csse/config/EmployeeRequest.xml"));
-		Source modify = new StreamSource(new File("src/com/csse/config/Employee-modified.xsl"));
-		Result response = new StreamResult(new File("src/com/csse/config/EmployeeResponse.xml"));
+	/**
+	 *
+	 * Request transform
+	 *
+	 * @param Exception
+	 *            the exception
+	 * @throws Exception
+	 */
+	public static void requestTransform() throws Exception {
+
+		Source request = new StreamSource(new File(EMPLOYEE_REQUEST_FILE_PATH));
+		Source modify = new StreamSource(new File(EMPLOYEE_MODIFIED_FILE_PATH));
+		Result response = new StreamResult(new File(EMPLOYEE_RESPONCE_FILE_PATH));
 		TransformerFactory.newInstance().newTransformer(modify).transform(request, response);
 	}
 
+	/**
+	 *
+	 * XMLXP ATHS
+	 *
+	 * @param Exception
+	 *            the exception
+	 * @return String>>
+	 * @throws Exception
+	 */
 	public static ArrayList<Map<String, String>> XMLXPATHS() throws Exception {
 
-		Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse("src/com/csse/config/EmployeeResponse.xml");
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(EMPLOYEE_RESPONCE_FILE_PATH);
 		XPath request = XPathFactory.newInstance().newXPath();
-		int n = Integer.parseInt((String) request.compile("count(//Employees/Employee)").evaluate(d, XPathConstants.STRING));
-		for (int i = 1; i <= n; i++) {
+
+		int employeeCount = Integer.parseInt(
+				(String) request.compile("count(//Employees/Employee)").evaluate(document, XPathConstants.STRING));
+
+		for (int i = 1; i <= employeeCount; i++) {
 			m = new HashMap<String, String>();
 			m.put("XpathEmployeeIDKey", (String) request.compile("//Employees/Employee[" + i + "]/EmployeeID/text()")
-					.evaluate(d, XPathConstants.STRING));
-			m.put("XpathEmployeeNameKey", (String) request.compile("//Employees/Employee[" + i + "]/EmployeeFullName/text()")
-					.evaluate(d, XPathConstants.STRING));
+					.evaluate(document, XPathConstants.STRING));
+			m.put("XpathEmployeeNameKey",
+					(String) request.compile("//Employees/Employee[" + i + "]/EmployeeFullName/text()")
+							.evaluate(document, XPathConstants.STRING));
 			m.put("XpathEmployeeAddressKey",
-					(String) request.compile("//Employees/Employee[" + i + "]/EmployeeFullAddress/text()").evaluate(d,
-							XPathConstants.STRING));
+					(String) request.compile("//Employees/Employee[" + i + "]/EmployeeFullAddress/text()")
+							.evaluate(document, XPathConstants.STRING));
 			m.put("XpathFacultyNameKey", (String) request.compile("//Employees/Employee[" + i + "]/FacultyName/text()")
-					.evaluate(d, XPathConstants.STRING));
+					.evaluate(document, XPathConstants.STRING));
 			m.put("XpathDepartmentKey", (String) request.compile("//Employees/Employee[" + i + "]/Department/text()")
-					.evaluate(d, XPathConstants.STRING));
+					.evaluate(document, XPathConstants.STRING));
 			m.put("XpathDesignationKey", (String) request.compile("//Employees/Employee[" + i + "]/Designation/text()")
-					.evaluate(d, XPathConstants.STRING));
+					.evaluate(document, XPathConstants.STRING));
 			l.add(m);
 		}
 		return l;

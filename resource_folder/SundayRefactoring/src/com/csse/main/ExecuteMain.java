@@ -16,7 +16,7 @@ public class ExecuteMain {
 
 		EmployeeService employeeService = new EmployeeService();
 		try {
-			XSLTransformUtil.rEQUESTtRANSFORM();
+			XSLTransformUtil.requestTransform();
 			employeeService.setEmployeesToArrayList();
 			employeeService.createEmployeeTable();
 			employeeService.createEmployee();
@@ -24,8 +24,9 @@ public class ExecuteMain {
 			// employeeService.employeeDelete("EMP10001");
 			employeeService.getAllEmployees();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
 
-} 
+}
