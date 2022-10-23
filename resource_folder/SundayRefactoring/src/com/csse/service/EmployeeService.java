@@ -15,12 +15,15 @@ import java.sql.PreparedStatement;
 //import javax.xml.xpath.XPathExpressionException;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 //import java.sql.SQLException;
 //import java.util.logging.Level;
 import java.sql.Statement;
 //import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmployeeService extends CommonProperties {
 
@@ -32,12 +35,20 @@ public class EmployeeService extends CommonProperties {
 
 	private PreparedStatement preparedStatement;
 
+	public static final Logger log = Logger.getLogger(EmployeeService.class.getName());
+
 	public EmployeeService() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"),
 					properties.getProperty("password"));
-		} catch (Exception e) {
+		} catch (ClassNotFoundException e) {
+			log.log(Level.SEVERE, "Connection not found");
+			log.log(Level.SEVERE, e.getMessage());
+
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, "SQL Error..");
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -58,16 +69,25 @@ public class EmployeeService extends CommonProperties {
 				System.out.println(EMPLOYEE.toString() + "\n");
 			}
 		} catch (Exception e) {
+			log.log(Level.SEVERE, "SQL Error..");
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
 	public void createEmployeeTable() {
 		try {
+
 			statement = connection.createStatement();
 			statement.executeUpdate(CommonUtil.getEmployeeQueries("q2"));
 			statement.executeUpdate(CommonUtil.getEmployeeQueries("q1"));
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, "SQL Error..");
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
+
+			log.log(Level.SEVERE, e.getMessage());
 		}
+
 	}
 
 	public void createEmployee() {
@@ -86,7 +106,10 @@ public class EmployeeService extends CommonProperties {
 			}
 			preparedStatement.executeBatch();
 			connection.commit();
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -108,7 +131,10 @@ public class EmployeeService extends CommonProperties {
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
 			printEmployeeDetails(l);
+		} catch (SQLException ex) {
+			log.log(Level.SEVERE, ex.getMessage());
 		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.getMessage());
 		}
 	}
 
@@ -126,8 +152,10 @@ public class EmployeeService extends CommonProperties {
 	public void getAllEmployees() {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
+
 		try {
 			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries("q5"));
+
 			ResultSet r = preparedStatement.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
@@ -139,9 +167,14 @@ public class EmployeeService extends CommonProperties {
 				e.setDesignation(r.getString(6));
 				l.add(e);
 			}
+
+			printEmployeeDetails(l);
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.log(Level.SEVERE, e.getMessage());
 		}
-		printEmployeeDetails(l);
 	}
 
 	public void printEmployeeDetails(ArrayList<Employee> l) {
