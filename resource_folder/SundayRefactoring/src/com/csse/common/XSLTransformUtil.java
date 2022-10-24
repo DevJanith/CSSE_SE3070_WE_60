@@ -62,7 +62,7 @@ public class XSLTransformUtil extends CommonProperties {
 	 * @return String>>
 	 * @throws Exception
 	 */
-	public static ArrayList<Map<String, String>> XMLXPATHS() throws Exception {
+	public static ArrayList<Map<String, String>> readXMLPathValues() throws Exception {
 
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(EMPLOYEE_RESPONCE_FILE_PATH);
