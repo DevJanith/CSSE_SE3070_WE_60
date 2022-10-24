@@ -64,8 +64,14 @@ public class EmployeeService extends CommonProperties {
 					CommonConstants.USER_PASSWORD);
 
 			log.log(Level.INFO, "Database Connection Success");
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -123,8 +129,23 @@ public class EmployeeService extends CommonProperties {
 			log.log(Level.SEVERE, e.getMessage());
 		} catch (ParserConfigurationException e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 	}
 
@@ -140,10 +161,33 @@ public class EmployeeService extends CommonProperties {
 			statement.executeUpdate(CommonUtil.getEmployeeQueries(CommonConstants.DROP_TABLE_IF_EXIST_EMPLOYEE));
 			statement.executeUpdate(CommonUtil.getEmployeeQueries(CommonConstants.CREATE_TABLE_EMPLOYEE));
 
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (XPathExpressionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SAXException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (IOException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
 			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 	}
 
@@ -170,10 +214,33 @@ public class EmployeeService extends CommonProperties {
 			}
 			preparedStatement.executeBatch();
 			connection.commit();
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (XPathExpressionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SAXException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (IOException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
 			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 	}
 
@@ -204,10 +271,33 @@ public class EmployeeService extends CommonProperties {
 			ArrayList<Employee> employeeList = new ArrayList<Employee>();
 			employeeList.add(employee);
 			printEmployeeDetails(employeeList);
-		} catch (SQLException ex) {
-			log.log(Level.SEVERE, ex.getMessage());
-		} catch (Exception ex) {
-			log.log(Level.SEVERE, ex.getMessage());
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (XPathExpressionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SAXException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (IOException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 	}
 
@@ -225,10 +315,33 @@ public class EmployeeService extends CommonProperties {
 					.prepareStatement(CommonUtil.getEmployeeQueries(CommonConstants.DELETE_EMPLOYEE));
 			preparedStatement.setString(1, eid);
 			preparedStatement.executeUpdate();
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (XPathExpressionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SAXException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (IOException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
 			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 	}
 
@@ -254,8 +367,33 @@ public class EmployeeService extends CommonProperties {
 				employee.setDesignation(r.getString(6));
 				employeeList.add(employee);
 			}
+		} catch (NumberFormatException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (XPathExpressionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SAXException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (IOException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
 		}
 		printEmployeeDetails(employeeList);
 	}
