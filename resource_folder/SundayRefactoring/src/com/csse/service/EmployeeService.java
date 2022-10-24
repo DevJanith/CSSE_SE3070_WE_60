@@ -15,12 +15,15 @@ import java.sql.PreparedStatement;
 //import javax.xml.xpath.XPathExpressionException;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 //import java.sql.SQLException;
 //import java.util.logging.Level;
 import java.sql.Statement;
 //import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The class Employee service extends common properties
@@ -35,6 +38,8 @@ public class EmployeeService extends CommonProperties {
 
 	private PreparedStatement preparedStatement;
 
+	private static EmployeeService uniqueInstance;
+
 	public static final String DRIVER_NAME = properties.getProperty("driverName");
 	public static final String URL = properties.getProperty("url");
 	public static final String USER_NAME = properties.getProperty("username");
@@ -47,20 +52,49 @@ public class EmployeeService extends CommonProperties {
 	public static final String GET_ALL_EMPLOYEES = "q5";
 	public static final String DELETE_EMPLOYEE = "q6";
 
+	public static final Logger log = Logger.getLogger(EmployeeService.class.getName());
+
 	/**
 	 *
 	 * Employee service
 	 *
 	 * @return
 	 */
-	public EmployeeService() {
+	private EmployeeService() {
 
 		try {
 			Class.forName(DRIVER_NAME);
 			connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD);
+
+			log.log(Level.INFO, "Database Connection Success");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// Get Singleton Object
+
+	public static EmployeeService getInstance() {
+		if (uniqueInstance == null) {
+			synchronized (EmployeeService.class) {
+				if (uniqueInstance == null) {
+					uniqueInstance = new EmployeeService();
+				}
+			}
+		}
+		return uniqueInstance;
+	}
+
+	/*
+	 * 
+	 * Execute Employee Service methods according to template pattern
+	 *
+	 */
+	public final void executeEmployeeServiceMethods() {
+		setEmployeesToArrayList();
+		createEmployeeTable();
+		createEmployee();
+		getAllEmployees();
 	}
 
 	/**
@@ -100,8 +134,12 @@ public class EmployeeService extends CommonProperties {
 			statement = connection.createStatement();
 			statement.executeUpdate(CommonUtil.getEmployeeQueries(DROP_TABLE_IF_EXIST_EMPLOYEE));
 			statement.executeUpdate(CommonUtil.getEmployeeQueries(CREATE_TABLE_EMPLOYEE));
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		}
+		catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
