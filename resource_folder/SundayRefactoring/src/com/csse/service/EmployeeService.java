@@ -85,7 +85,7 @@ public class EmployeeService extends CommonProperties {
 		return uniqueInstance;
 	}
 
-	/*
+	/**
 	 * 
 	 * Execute Employee Service methods according to template pattern
 	 *
