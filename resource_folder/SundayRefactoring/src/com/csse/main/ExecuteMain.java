@@ -18,24 +18,14 @@ public class ExecuteMain {
 	public static final Logger log = Logger.getLogger(ExecuteMain.class.getName());
 	
 	public static void main(String[] args) {
-		
-
-//		EmployeeService employeeService = new EmployeeService();
-		
+				
 		//	Get Singleton instance from employee service
 		EmployeeService employeeService = EmployeeService.getInstance();
 		
 		try {
 			XSLTransformUtil.requestTransform();
-		/*	employeeService.setEmployeesToArrayList();
-			employeeService.createEmployeeTable();
-			employeeService.createEmployee();
-			// employeeService.employeeGetById("EMP10004");
-			// employeeService.employeeDelete("EMP10001");
-			employeeService.getAllEmployees();*/
-			
-			
-			//	Execute All methods according to template
+					
+		//	Execute All methods according to template
 			employeeService.executeEmployeeServiceMethods();
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());

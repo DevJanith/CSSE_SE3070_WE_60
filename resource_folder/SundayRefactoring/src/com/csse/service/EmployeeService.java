@@ -119,7 +119,7 @@ public class EmployeeService extends CommonProperties {
 				System.out.println(EMPLOYEE.toString() + "\n");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -137,8 +137,7 @@ public class EmployeeService extends CommonProperties {
 
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
@@ -165,8 +164,10 @@ public class EmployeeService extends CommonProperties {
 			}
 			preparedStatement.executeBatch();
 			connection.commit();
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -196,8 +197,10 @@ public class EmployeeService extends CommonProperties {
 			ArrayList<Employee> employeeList = new ArrayList<Employee>();
 			employeeList.add(employee);
 			printEmployeeDetails(employeeList);
+		} catch (SQLException ex) {
+			log.log(Level.SEVERE, ex.getMessage());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.log(Level.SEVERE, ex.getMessage());
 		}
 	}
 
@@ -214,8 +217,10 @@ public class EmployeeService extends CommonProperties {
 			preparedStatement = connection.prepareStatement(CommonUtil.getEmployeeQueries(DELETE_EMPLOYEE));
 			preparedStatement.setString(1, eid);
 			preparedStatement.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		}catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -241,7 +246,7 @@ public class EmployeeService extends CommonProperties {
 				employeeList.add(employee);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage());
 		}
 		printEmployeeDetails(employeeList);
 	}
