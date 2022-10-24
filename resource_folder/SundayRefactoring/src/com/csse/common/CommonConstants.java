@@ -1,5 +1,17 @@
 package com.csse.common;
 
+/**
+ * This is the common consents file for Sunday Refactoring Project
+ * 
+ * @author Janith Gamage
+ * @author Himaasha Ranaweera
+ * @author Supun Dileepa
+ * @author Ridma Dilshan
+ * 
+ * @version 1.0
+ *
+ */
+
 public class CommonConstants extends CommonProperties {
 
 	public static final String DRIVER_NAME = properties.getProperty("driverName");

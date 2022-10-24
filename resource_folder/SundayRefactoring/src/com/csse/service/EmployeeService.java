@@ -52,7 +52,7 @@ public class EmployeeService extends CommonProperties {
 
 	/**
 	 *
-	 * Employee service
+	 * Connect to Database , and startEmployee service
 	 *
 	 * @return
 	 */
@@ -75,8 +75,11 @@ public class EmployeeService extends CommonProperties {
 		}
 	}
 
-	// Get Singleton Object
-
+	/**
+	 * Get Singleton Object
+	 * 
+	 * @return
+	 */
 	public static EmployeeService getInstance() {
 		if (uniqueInstance == null) {
 			synchronized (EmployeeService.class) {
@@ -88,7 +91,7 @@ public class EmployeeService extends CommonProperties {
 		return uniqueInstance;
 	}
 
-	/*
+	/**
 	 * 
 	 * Execute Employee Service methods according to template pattern
 	 *
@@ -101,9 +104,20 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Sets the employees to array list
-	 *
+	 * This method read EmployeeResponce.xml and load data into ArrayList of
+	 * employee objects
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void setEmployeesToArrayList() {
 		try {
@@ -150,9 +164,19 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Create employee table
-	 *
+	 * This method drop table if exists and create EmployeeTable.
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void createEmployeeTable() {
 
@@ -192,9 +216,19 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Create employee
-	 *
+	 * This method create Employee record in the Employee Table.
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void createEmployee() {
 
@@ -245,12 +279,23 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Gets the employee by identifier
-	 *
-	 * @param eid
-	 *            the employee ID
+	 * This method retrieve Employee record from the Employee Table according to
+	 * EmployeeID.
 	 * 
+	 * @param eid
+	 *            => employee ID
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void getEmployeeById(String eid) {
 
@@ -302,11 +347,23 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Delete employee by identifier
-	 *
+	 * This method delete Employee record from the Employee Table according to
+	 * EmployeeID.
+	 * 
 	 * @param eid
-	 *            the employee ID
+	 *            => employee ID
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void deleteEmployeeById(String eid) {
 
@@ -346,9 +403,22 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Gets the all employees
-	 *
+	 * This method retrieve All Employee records from the Employee Table.
+	 * 
+	 * @param eid
+	 *            => employee ID
+	 * 
+	 * @throws NumberFormatException
+	 *             - Thrown to indicate that the application has attempted to
+	 *             convert a string to one of the numeric types
+	 * @throws XPathExpressionException
+	 *             - Thrown when error in an Xpath expression
+	 * @throws SAXException
+	 *             - Encapsulate a general SAX error or warning
+	 * @throws IOException
+	 *             - Exception produced by failed or interrupted I/O operations.
+	 * @throws XPathExpressionException
+	 *             - Indicate a serious configuration error
 	 */
 	public void getAllEmployees() {
 
@@ -399,9 +469,8 @@ public class EmployeeService extends CommonProperties {
 	}
 
 	/**
-	 *
-	 * Print employee details
-	 *
+	 * This method display Employee records from the Employee Table.
+	 * 
 	 * @param employeeList
 	 *            the employee list
 	 */
